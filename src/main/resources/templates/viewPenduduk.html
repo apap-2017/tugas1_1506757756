@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Bootstrap Example</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    hr{
+      border-top: 1px solid black;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">SI Kependudukan</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Cari Data</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+  <div class="col-sm-2 sidenav"></div>
+    <div class="col-sm-8 text-left"> 
+      <h3 th:text="'Lihat Data Penduduk - ' + ${penduduk.nik}">Lihat Data Penduduk</h3>
+      <br/>
+      <p th:text="'NIK: ' + ${penduduk.nik}">NIK</p>
+      <p th:text="'Nama: ' + ${penduduk.nama}">Nama Penduduk</p>
+      <p th:text="'Tempat/Tanggal Lahir: ' + ${penduduk.tempat_lahir} + ' / ' + ${penduduk.tanggal_lahir}">Tempat/Tanggal Lahir Penduduk</p>
+      <p th:text="'Alamat: ' + ${penduduk.alamat}">Alamat</p>
+      <p th:text="'RT/RW: ' + ${penduduk.rt} + '/' + ${penduduk.rw}">RT/RW</p>
+      <p th:text="'Kelurahan/Desa: ' + ${penduduk.nama_kelurahan}">Kelurahan/Desa</p>
+      <p th:text="'Kecamatan: ' + ${penduduk.nama_kecamatan}">Kecamatan</p>
+      <p th:text="'Kota: ' + ${penduduk.nama_kota}">Kota</p>
+      <p th:text="'Golongan Darah: ' + ${penduduk.golongan_darah}">Golongan Darah</p>
+      <p th:text="'Agama: ' + ${penduduk.agama}">Agama</p>
+      <p th:text="'Status Perkawinan: ' + ${penduduk.status_perkawinan}">Status Perkawinan</p>
+      <p th:text="'Pekerjaan: ' + ${penduduk.pekerjaan}">Pekerjaan</p>
+      <p th:text="'Kewarganegaraan: ' + ${penduduk.kewarganegaraan}">Kewarganegaraan</p>
+      <p th:text="'Status Kematian: ' + ${penduduk.kematian}">Status Kematian</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

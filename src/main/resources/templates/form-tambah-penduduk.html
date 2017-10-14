@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tambah Penduduk</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    hr{
+      border-top: 1px solid black;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">SI Kependudukan</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Cari Data</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+  <div class="col-sm-2 sidenav"></div>
+    <div class="col-sm-8 text-left"> 
+      <h3 th:text="'Tambah Penduduk'">Lihat Data Keluarga</h3>
+      <br/>
+     	<form>
+		  <div class="form-group">
+		    <label for="nama">Masukkan nama:</label>
+		    <input type="text" class="form-control" name="nama"/>
+		  </div>
+		  <div class="form-group">
+		    <label for="tempat_lahir">Tempat Lahir:</label>
+		    <input type="text" class="form-control" name="tempat_lahir"/>
+		  </div>
+		  <div class="form-group">
+		    <label for="tanggal_lahir">Tanggal Lahir:</label>
+		    <input type="text" class="form-control" name="tanggal_lahir"/>
+		  </div>
+		  <div class="form-group">
+		      <label for="golongan_darah">Golongan Darah</label>
+		      <select class="form-control" name="golongan_darah">
+		      <option selected="true" disabled="disabled" value=""></option> 
+		        <option>A+</option>
+		        <option>A-</option>
+		        <option>B+</option>
+		        <option>B-</option>
+		        <option>AB+</option>
+		        <option>AB-</option>
+		        <option>O+</option>
+		        <option>O-</option>
+		      </select>
+	      </div>
+		  <div class="form-group">
+		    <label for="agama">Agama:</label>
+		    <input type="text" class="form-control" name="agama"/>
+		  </div>
+		  <div class="form-group">
+		      <label for="status_perkawinan">Status Perkawinan</label>
+		      <select class="form-control" name="status_perkawinan">
+		      <option selected="true" disabled="disabled" value=""></option> 
+		        <option>Kawin</option>
+		        <option>Belum Kawin</option>
+		      </select>
+	      </div>
+	      <div class="form-group">
+		    <label for="pekerjaan">Pekerjaan:</label>
+		    <input type="text" class="form-control" name="pekerjaan"/>
+		  </div>
+		  <div class="form-group">
+		    <label for="kewarganegaraan">Kewarganegaraan:</label>
+		    <input type="text" class="form-control" name="kewarganegaraan"/>
+		  </div>
+		  <div class="form-group">
+		      <label for="status_kematian">Status Kematian:</label>
+		      <select class="form-control" name="status_kematian">
+		      	<option selected="true" disabled="disabled" value=""></option> 
+		        <option>Hidup</option>
+		        <option>Wafat</option>
+		      </select>
+	      </div>
+	      <div class="form-group">
+		    <label for="id_keluarga">ID Keluarga:</label>
+		    <input type="text" class="form-control" name="id_keluarga"/>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Simpan</button>
+		</form>
+		<br/>
+    </div>
+  </div>
+</div>
+</body>
+</html>
