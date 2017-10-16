@@ -3,7 +3,9 @@ package com.example.tugas1.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.tugas1.model.KeluargaModel;
@@ -28,6 +30,12 @@ public class KependudukanController {
     {
         return "form-tambah-penduduk";
     }
+	
+	@RequestMapping(value="/penduduk/tambah", method=RequestMethod.POST)
+	public String tambahPenduduk(@ModelAttribute PendudukModel penduduk) {
+		pendudukDAO.addPenduduk(penduduk);
+		return "sukses-tambah-penduduk";
+	}
 	
 	@RequestMapping("/keluarga/tambah")
     public String addKeluarga()

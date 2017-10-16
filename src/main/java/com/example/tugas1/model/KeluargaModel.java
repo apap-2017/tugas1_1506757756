@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class KeluargaModel {
-	private String idKeluarga;
+	private String id_keluarga;
 	private String nomor_kk;
 	private String alamat;
 	private String rt;

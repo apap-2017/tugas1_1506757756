@@ -18,5 +18,7 @@ public interface KependudukanService {
 	
 	void updateStatusKematian(PendudukModel penduduk);
 	
+	KeluargaModel selectAlamat(String id_keluarga);
+	
 	//select berdasarkan kota,kabupaten,dll...w
 }
