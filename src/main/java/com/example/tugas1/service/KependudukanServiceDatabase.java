@@ -87,8 +87,19 @@ public class KependudukanServiceDatabase implements KependudukanService{
 
 	@Override
 	public void updateStatusKematian(PendudukModel penduduk) {
-		// TODO Auto-generated method stub
-		
+    	String idKeluarga = penduduk.getId_keluarga();
+    	List<PendudukModel> anggota = kependudukanMapper.selectAnggotaKeluarga(idKeluarga);
+    	
+    	int wafat = 0;
+    	for(int i = 0; i < anggota.size(); i++) {
+    		if(anggota.get(i).getIs_wafat() == 1) {
+    			wafat++;
+    		}
+    	}
+    	if(wafat == anggota.size()) {
+    		kependudukanMapper.updateStatusKeluarga(idKeluarga);
+    	}
+		kependudukanMapper.updateStatusKematian(penduduk.getNik());
 	}
 
 	@Override

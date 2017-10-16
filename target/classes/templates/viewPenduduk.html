@@ -82,6 +82,12 @@
       <p th:text="'Pekerjaan: ' + ${penduduk.pekerjaan}">Pekerjaan</p>
       <p th:text="'Kewarganegaraan: ' + ${penduduk.kewarganegaraan}">Kewarganegaraan</p>
       <p th:text="'Status Kematian: ' + ${penduduk.kematian}">Status Kematian</p>
+      <div th:if="${penduduk.is_wafat} == '0'">
+		  <form action="penduduk/mati" method="post">
+				<input type="hidden" name="nik" th:value="${penduduk.nik}"></input>
+				<button type="submit" class="btn btn-danger">Non-aktifkan</button>
+		  </form>	
+	 </div>
     </div>
   </div>
 </div>

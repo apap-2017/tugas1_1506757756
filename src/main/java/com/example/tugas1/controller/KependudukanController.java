@@ -147,4 +147,14 @@ public class KependudukanController {
 		pendudukDAO.updateKeluarga(keluarga);
 		return "sukses-tambah-keluarga";
 	}
+	
+	 @RequestMapping(value="penduduk/mati", method = RequestMethod.POST)
+	    public String changePendudukStatus(Model model, 
+	    		@RequestParam(value="nik", required=true) String nik) {
+	    	PendudukModel penduduk = pendudukDAO.selectPenduduk(nik);
+	    	pendudukDAO.updateStatusKematian(penduduk);
+	    	
+	    	model.addAttribute("nik_kematian", nik);
+	    	return "success";
+	    }
 }

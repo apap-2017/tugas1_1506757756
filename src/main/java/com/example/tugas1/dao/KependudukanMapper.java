@@ -35,6 +35,40 @@ public interface KependudukanMapper {
     		"where nomor_kk = #{nkk}")
     		List<PendudukModel> selectPenduduks (@Param("nkk") String nkk);
 	
+	@Insert("insert into penduduk (nik, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, is_wni, id_keluarga, agama, pekerjaan, status_perkawinan, status_dalam_keluarga, golongan_darah, is_wafat)"
+    		+ "values ('${nik}', '${nama}', '${tempat_lahir}', '${tanggal_lahir}', ${jenis_kelamin}, ${is_wni}, '${id_keluarga}', '${agama}', "
+    		+ "'${pekerjaan}', '${status_perkawinan}', '${status_dalam_keluarga}', '${golongan_darah}', '${is_wafat}')")
+    void addPenduduk (PendudukModel penduduk);
+	
+	@Update("update penduduk set nik = #{nik}, nama = #{nama}, tempat_lahir = #{tempat_lahir}, tanggal_lahir = #{tanggal_lahir}, "
+			+ "jenis_kelamin = #{jenis_kelamin}, is_wni = #{is_wni}, golongan_darah = #{golongan_darah}, is_wafat = #{is_wafat} "
+			+ "where id = #{id}")
+    void updatePenduduk (PendudukModel penduduk);
+	
+	 @Update("UPDATE penduduk SET is_wafat = 1 WHERE nik = #{nik}")
+	   void updateStatusKematian(@Param("nik") String nik);
+	 
+	 @Select("select * from penduduk where nik like CONCAT(#{nik},'%') order by nik desc limit 1")
+		PendudukModel getNIKBefore(String nik);
+	
+	@Select("select * from keluarga, penduduk where penduduk.id_keluarga = keluarga.id and #{id_keluarga} = penduduk.id_keluarga")
+    @Results(value = {
+        	@Result(property="nik", column="nik"),
+        	@Result(property="nama", column="nama"),
+        	@Result(property="tempat_ahir", column="tempat_lahir"),
+        	@Result(property="tanggal_lahir", column="tanggal_lahir"),
+        	@Result(property="jenis_kelamin", column="jenis_kelamin"),
+        	@Result(property="is_wni", column="is_wni"),
+        	@Result(property="id_keluarga", column="id_keluarga"),
+        	@Result(property="agama", column="agama"),
+        	@Result(property="pekerjaan", column="pekerjaan"),
+        	@Result(property="status_perkawinan", column="status_perkawinan"),
+        	@Result(property="status_dalam_keluarga", column="status_dalam_keluarga"),
+        	@Result(property="golongan_darah", column="golongan_darah"),
+        	@Result(property="is_wafat", column="is_wafat")
+        })
+    List<PendudukModel> selectAnggotaKeluarga(String id_keluarga);
+	
 	@Select("select * from keluarga join kelurahan join kecamatan join kota" + 
 			" on keluarga.id_kelurahan = kelurahan.id" + 
 			" and kelurahan.id_kecamatan = kecamatan.id and kecamatan.id_kota = kota.id"
@@ -77,22 +111,13 @@ public interface KependudukanMapper {
 		    })
 	KeluargaModel selectAlamat(String id_keluarga);
 	
-	@Insert("insert into penduduk (nik, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, is_wni, id_keluarga, agama, pekerjaan, status_perkawinan, status_dalam_keluarga, golongan_darah, is_wafat)"
-    		+ "values ('${nik}', '${nama}', '${tempat_lahir}', '${tanggal_lahir}', ${jenis_kelamin}, ${is_wni}, '${id_keluarga}', '${agama}', "
-    		+ "'${pekerjaan}', '${status_perkawinan}', '${status_dalam_keluarga}', '${golongan_darah}', '${is_wafat}')")
-    void addPenduduk (PendudukModel penduduk);
-	
-	@Update("update penduduk set nik = #{nik}, nama = #{nama}, tempat_lahir = #{tempat_lahir}, tanggal_lahir = #{tanggal_lahir}, "
-			+ "jenis_kelamin = #{jenis_kelamin}, is_wni = #{is_wni}, golongan_darah = #{golongan_darah}, is_wafat = #{is_wafat} "
-			+ "where id = #{id}")
-    void updatePenduduk (PendudukModel penduduk);
 	
 	@Insert("insert into keluarga (nomor_kk, alamat, rt, rw, id_kelurahan, is_tidak_berlaku)"
     		+ "values ('${nomor_kk}', '${alamat}', '${rt}', '${rw}', '${id_kelurahan}', ${is_tidak_berlaku})")
     void addKeluarga (KeluargaModel keluarga);
 	
-	@Select("select * from penduduk where nik like CONCAT(#{nik},'%') order by nik desc limit 1")
-	PendudukModel getNIKBefore(String nik);
+	 @Update("update keluarga set is_berlaku = 1 where id = #{id}")
+	   void updateStatusKeluarga(@Param("id") String id);
 	
 	@Select("select * from keluarga where nomor_kk like CONCAT(#{nomor_kk},'%') order by nomor_kk desc limit 1")
 	KeluargaModel getNKKBefore(String nomor_kk);
