@@ -1,10 +1,17 @@
 package com.example.tugas1.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.tugas1.dao.KependudukanMapper;
+import com.example.tugas1.model.KecamatanModel;
 import com.example.tugas1.model.KeluargaModel;
+import com.example.tugas1.model.KelurahanModel;
+import com.example.tugas1.model.KotaModel;
 import com.example.tugas1.model.PendudukModel;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,43 +45,44 @@ public class KependudukanServiceDatabase implements KependudukanService{
 		kependudukanMapper.addPenduduk(penduduk);
 	}
 
-	private String generateNIK(PendudukModel penduduk) {
-		String nik = "";
-		String[] tglSplit = penduduk.getTanggal_lahir().split("-");
-		nik += kependudukanMapper.selectAlamat(penduduk.getId_keluarga()).getNomor_kk().substring(0,6);
-		log.info("add penduduk dengan id {}", nik);
-		nik += (Integer.parseInt(tglSplit[2]) + Integer.parseInt(penduduk.getJenis_kelamin())*40) + "" + tglSplit[1] + tglSplit[0].substring(2);
-		log.info("add penduduk dengan id {}", nik);
-		
-		PendudukModel pendudukDouble = kependudukanMapper.getNIKBefore(nik);
-		
-		if( pendudukDouble == null || pendudukDouble.getNik().equals(pendudukDouble.getNik())) {
-			log.info("add penduduk dengan id {}", nik);
-			nik += "0001";
-		} else {
-			int doubleNIK = Integer.parseInt(pendudukDouble.getNik()) + 1;
-			nik = doubleNIK + "";
-			log.info("add penduduk dengan id {}", nik);
-		}
-		return nik;
-	}
+
 
 	@Override
 	public void addKeluarga(KeluargaModel keluarga) {
-		// TODO Auto-generated method stub
+		log.info("Keluarga added");
+		keluarga.setNomor_kk(generateNKK(keluarga));
+		kependudukanMapper.addKeluarga(keluarga);
+	}
+
+	private String generateNKK(KeluargaModel keluarga) {
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String[] tanggalSplit = date.split("-");
+		String tahun = tanggalSplit[0].substring(2);
+		String bulan = tanggalSplit[1];
+		String tanggal = tanggalSplit[2];
 		
+		String nkk = keluarga.getKode_kecamatan().substring(0, 6) + tanggal + bulan + tahun;
+		
+		KeluargaModel keluargaDouble = kependudukanMapper.getNKKBefore(nkk);
+		
+		if( keluargaDouble == null || keluargaDouble.getNomor_kk().equals(keluargaDouble.getNomor_kk())) {
+			nkk += "0001";
+		} else {
+			long doubleNKK = Long.parseLong(keluargaDouble.getNomor_kk()) + 1;
+			nkk = doubleNKK + "";
+		}
+		return nkk;
 	}
 
 	@Override
 	public void updatePenduduk(PendudukModel penduduk) {
-		// TODO Auto-generated method stub
-		
+		log.info("Penduduk updated");
+		kependudukanMapper.updatePenduduk(penduduk);
 	}
 
 	@Override
 	public void updateKeluarga(KeluargaModel keluarga) {
-		// TODO Auto-generated method stub
-		
+		kependudukanMapper.updateKeluarga(keluarga);
 	}
 
 	@Override
@@ -84,8 +92,40 @@ public class KependudukanServiceDatabase implements KependudukanService{
 	}
 
 	@Override
-	public KeluargaModel selectAlamat(String id_keluarga) {
-		return kependudukanMapper.selectAlamat(id_keluarga);
+	public List<KelurahanModel> selectAllKelurahan() {
+		log.info("Select kelurahan");
+		return kependudukanMapper.selectAllKelurahan();
 	}
+
+	@Override
+	public List<KecamatanModel> selectAllKecamatan() {
+		return kependudukanMapper.selectAllKecamatan();
+	}
+
+	@Override
+	public List<KotaModel> selectAllKota() {
+		return kependudukanMapper.selectAllKota();
+	}
+
+	@Override
+	public String generateNIK(PendudukModel penduduk) {
+		log.info("NIK generated");
+		String nik = "";
+		String[] tglSplit = penduduk.getTanggal_lahir().split("-");
+		nik += kependudukanMapper.selectAlamat(penduduk.getId_keluarga()).getNomor_kk().substring(0,6);
+		nik += (Integer.parseInt(tglSplit[2]) + Integer.parseInt(penduduk.getJenis_kelamin())*40) + "" + tglSplit[1] + tglSplit[0].substring(2);
+		
+		PendudukModel pendudukDouble = kependudukanMapper.getNIKBefore(nik);
+		
+		if(pendudukDouble == null) {
+			nik += "0001";
+		} else {
+			log.info("Input {}", pendudukDouble.getNik());
+			long doubleNIK = Long.parseLong(pendudukDouble.getNik()) + 1;
+			nik = doubleNIK + "";
+		}
+		return nik;
+	}
+
 	
 }

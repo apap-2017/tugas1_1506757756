@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Lihat Keluarga</title>
+  <title>Error</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -66,49 +66,10 @@
   <div class="row content">
   <div class="col-sm-2 sidenav"></div>
     <div class="col-sm-8 text-left"> 
-      <h3 th:text="'Lihat Data Keluarga - ' + ${keluarga.nomor_kk}">Lihat Data Keluarga</h3>
+      <h1 th:text="'ERROR!'">ERROR!</h1>
+      <h3 th:text="'Halaman yang dicari tidak ditemukan'">Tidak ditemukan</h3>
       <br/>
-      <p th:text="'NKK: ' + ${keluarga.nomor_kk}">NKK</p>
-      <p th:text="'Alamat: ' + ${keluarga.alamat}">Alamat</p>
-      <p th:text="'RT/RW: ' + ${keluarga.rt} + ' / ' + ${keluarga.rw}">RT/RW</p>
-      <p th:text="'Kelurahan/Desa: ' + ${keluarga.nama_kelurahan}">Kelurahan</p>
-      <p th:text="'Kecamatan: ' + ${keluarga.nama_kecamatan}">Kecamatan</p>
-      <p th:text="'Kota: ' + ${keluarga.nama_kota}">Kota</p>
-      <hr/>
-      <table class="table">
-	    <thead>
-	      <tr>
-	        <th>No.</th>
-	        <th>Nama Lengkap</th>
-	        <th>NIK</th>
-	        <th>Jenis Kelamin</th>
-	        <th>Tempat Lahir</th>
-	        <th>Tanggal Lahir</th>
-	        <th>Agama</th>
-	        <th>Pekerjaan</th>
-	        <th>Status Perkawinan</th>
-	        <th>Status dalam Keluarga</th>
-	        <th>Kewarganegaraan</th>
-	      </tr>
-	    </thead>
-	    <tbody>
-	      <tr th:each="penduduk,iterationStatus: ${keluarga.penduduks}">
-			<td th:text="${iterationStatus.count}">No. 1</td>
-			<td th:text="${penduduk.nama}">Nama</td>
-			<td th:text="${penduduk.nik}">NIK</td>
-			<td th:text="${penduduk.jenis_kelamin == 0} ? 'Laki-laki' : 'Perempuan'">Jenis Kelamin</td>
-			<td th:text="${penduduk.tempat_lahir}">Tempat Lahir</td>
-			<td th:text="${penduduk.tanggal_lahir}">Tanggal Lahir</td>
-			<td th:text="${penduduk.agama}">Agama</td>
-			<td th:text="${penduduk.pekerjaan}">Pekerjaan</td>
-			<td th:text="${penduduk.status_perkawinan}">Status Perkawinan</td>
-			<td th:text="${penduduk.status_dalam_keluarga}">Status dalam Keluarga</td>
-			<td th:text="${penduduk.is_wni} == 1 ? 'WNI' : 'WNA'">Kewarganegaraan</td>
-		   </tr>
-	    </tbody>
-	  </table>
-      
-    </div>
+	</div>
   </div>
 </div>
 </body>

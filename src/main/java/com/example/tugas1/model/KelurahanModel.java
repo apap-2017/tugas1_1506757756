@@ -1,6 +1,5 @@
 package com.example.tugas1.model;
 
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,10 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class KelurahanModel {
-	private String idKelurahan;
-	private char kode_kelurahan;
-	private char id_kecamatan;
+	private String id;
+	private String kode_kelurahan;
+	private String id_kecamatan;
+	private String nama_kelurahan;
+	private String kode_pos;
+	private String id_kota;
+	private String nama_kota;
 	private String nama_kecamatan;
-	private char kode_pos;
-	List<KecamatanModel> kecamatan;
+	private String kode_kecamatan;
+	private String kode_kota;
 }

@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -68,31 +70,35 @@
     <div class="col-sm-8 text-left"> 
       <h3 th:text="'Tambah Keluarga'">Tambah Keluarga</h3>
       <br/>
-     	<form>
+     	<form action="/keluarga/tambah" th:object="${keluarga}" method="POST">
 		  <div class="form-group">
 		    <label for="alamat">Alamat:</label>
-		    <input type="text" class="form-control" name="alamat"/>
+		    <input type="text" class="form-control" name="alamat" th:value="${keluarga.alamat}" th:field="*{alamat}" required = "true"/>
 		  </div>
 		  <div class="form-group">
 		    <label for="rt">RT:</label>
-		    <input type="text" class="form-control" name="rt"/>
+		    <input type="text" class="form-control" name="rt" th:value="${keluarga.rt}" th:field="*{rt}" required = "true"/>
 		  </div>
 		  <div class="form-group">
 		    <label for="rw">RW:</label>
-		    <input type="text" class="form-control" name="rw"/>
+		    <input type="text" class="form-control" name="rw" th:value="${keluarga.rw}" th:field="*{rw}" required = "true"/>
 		  </div>
 		  <div class="form-group">
 		    <label for="kelurahan">Kelurahan/Desa:</label>
-		    <input type="text" class="form-control" name="kelurahan"/>
+		    <select name="id_kelurahan" class="form-control selectpicker" data-live-search="true" th:field="*{id_kelurahan}" id="kelurahan">
+		     	<option value="">PILIH KELURAHAN</option>
+		     	<option th:each="kelurahan: ${allKelurahan}" th:value="${kelurahan.id}" th:text="${kelurahan.nama_kelurahan}" kota="'[[${kelurahan.nama_kota}]]'"> </option>
+		    </select>
 		  </div>
 	      <div class="form-group">
-		    <label for="pekerjaan">Kecamatan:</label>
-		    <input type="text" class="form-control" name="kecamatan"/>
+		    <label for="kecamatan">Kecamatan:</label>
+		    <input type="text" class="form-control" name="kecamatan" id="kecamatan" readonly="readonly"/>
 		  </div>
 		  <div class="form-group">
 		    <label for="kota">Kota:</label>
-		    <input type="text" class="form-control" name="kota"/>
+		    <input type="text" class="form-control" id="kota" readonly="readonly" name="kota"/>
 		  </div>
+		  <input type="hidden" name="kode_kecamatan" id="kode_kecamatan"/>
 		  <button type="submit" class="btn btn-primary">Simpan</button>
 		</form>
 		<br/>
@@ -100,4 +106,20 @@
   </div>
 </div>
 </body>
+<script th:inline="javascript">
+	var allKelurahan = [[${allKelurahan}]];
+	var kelurahans = {};
+	
+	$( document ).ready(function() {
+		allKelurahan.forEach(function(kelurahan) {
+			kelurahans[kelurahan.id] = kelurahan;	
+		})
+	});
+	
+	$('#kelurahan').on('change', function() {
+	  $('#kecamatan').val(kelurahans[this.value].nama_kecamatan);
+	  $('#kota').val(kelurahans[this.value].nama_kota);
+	  $('#kode_kecamatan').val(kelurahans[this.value].kode_kecamatan);
+	})
+</script>
 </html>

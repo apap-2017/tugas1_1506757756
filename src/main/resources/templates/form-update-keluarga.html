@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Tambah Keluarga</title>
+  <title>Update Keluarga</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -68,9 +68,9 @@
   <div class="row content">
   <div class="col-sm-2 sidenav"></div>
     <div class="col-sm-8 text-left"> 
-      <h3 th:text="'Tambah Keluarga'">Tambah Keluarga</h3>
+      <h3 th:text="'Update Keluarga'">Update Keluarga</h3>
       <br/>
-     	<form action="/keluarga/tambah" th:object="${keluarga}" method="POST">
+     	<form th:action="'/keluarga/ubah/' + ${keluarga.nomor_kk}" method="POST" th:object="${keluarga}">
 		  <div class="form-group">
 		    <label for="alamat">Alamat:</label>
 		    <input type="text" class="form-control" name="alamat" th:value="${keluarga.alamat}" th:field="*{alamat}" required = "true"/>
