@@ -1,5 +1,7 @@
 package com.example.tugas1.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.tugas1.model.KotaModel;
+import com.example.tugas1.model.KecamatanModel;
 import com.example.tugas1.model.KeluargaModel;
+import com.example.tugas1.model.KelurahanModel;
 import com.example.tugas1.model.PendudukModel;
 import com.example.tugas1.service.KependudukanService;
-
 
 @Controller
 public class KependudukanController {
@@ -75,19 +79,6 @@ public class KependudukanController {
         
         if (penduduk != null) {
             model.addAttribute ("penduduk", penduduk);
-            if(penduduk.getIs_wni() == 1) {
-            	penduduk.setKewarganegaraan("WNI");
-            }
-            else {
-            	penduduk.setKewarganegaraan("WNA");
-            }
-            
-            if(penduduk.getIs_wafat() == 1) {
-            	penduduk.setKematian("Wafat");
-            }
-            else {
-            	penduduk.setKematian("Hidup");
-            }
             return "viewPenduduk";
         } else {
             model.addAttribute ("penduduk", penduduk);
@@ -119,8 +110,10 @@ public class KependudukanController {
     }
 	
 	@RequestMapping(value="/keluarga/tambah", method=RequestMethod.POST)
-	public String tambahKeluarga(@ModelAttribute KeluargaModel keluarga) {
+	public String tambahKeluarga(Model model,
+			@ModelAttribute KeluargaModel keluarga) {
 		pendudukDAO.addKeluarga(keluarga);
+		model.addAttribute("nkk", keluarga.getNomor_kk());
 		return "sukses-tambah-keluarga";
 	}
 	
@@ -155,6 +148,30 @@ public class KependudukanController {
 	    	pendudukDAO.updateStatusKematian(penduduk);
 	    	
 	    	model.addAttribute("nik_kematian", nik);
-	    	return "success";
+	    	return "sukses-mati";
 	    }
+	 
+	 @RequestMapping(value = "/penduduk/cari")
+	 public String cariPendudukKota (Model model,
+			 @RequestParam(value = "kota", required = false, defaultValue = "0") String id_kota,
+	         @RequestParam(value = "kecamatan", required = false, defaultValue = "0") String id_kecamatan,
+	         @RequestParam(value = "kelurahan", required = false, defaultValue = "0") String id_kelurahan){
+		 
+		 List<KotaModel> list_kota = pendudukDAO.selectAllKota();
+		 model.addAttribute("list_kota", list_kota);
+		 
+		 if(id_kota != null) {
+			 model.addAttribute("id_kota", id_kota);
+			 List<KecamatanModel> list_kecamatan = pendudukDAO.selectKecamatanByIdKota(id_kota);
+			 model.addAttribute("list_kecamatan", list_kecamatan);
+		 }
+		 
+		 if(id_kecamatan != null) {
+			 model.addAttribute("id_kecamatan", id_kecamatan);
+			 List<KelurahanModel> list_kelurahan = pendudukDAO.selectKelurahanByIdKecamatan(id_kecamatan);
+			 model.addAttribute("list_kelurahan", list_kelurahan);
+		 }
+		 
+		 return "cari-penduduk";
+	 }
 }

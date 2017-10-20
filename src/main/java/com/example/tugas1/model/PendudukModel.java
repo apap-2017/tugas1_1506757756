@@ -18,7 +18,6 @@ public class PendudukModel {
 	private String tempat_lahir;
 	private String jenis_kelamin;
 	private int is_wni;
-	private String kewarganegaraan;
 	private String id_keluarga;
 	private String agama;
 	private String pekerjaan;
@@ -29,7 +28,6 @@ public class PendudukModel {
 	private String alamat;
 	private String rt;
 	private String rw;
-	private String kematian;
 	private String nama_kelurahan;
 	private String nama_kecamatan;
 	private String nama_kota;

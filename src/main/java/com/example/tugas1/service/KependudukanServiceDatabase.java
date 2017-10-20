@@ -60,12 +60,12 @@ public class KependudukanServiceDatabase implements KependudukanService{
 		String tahun = tanggalSplit[0].substring(2);
 		String bulan = tanggalSplit[1];
 		String tanggal = tanggalSplit[2];
-		
+	
 		String nkk = keluarga.getKode_kecamatan().substring(0, 6) + tanggal + bulan + tahun;
 		
 		KeluargaModel keluargaDouble = kependudukanMapper.getNKKBefore(nkk);
 		
-		if( keluargaDouble == null || keluargaDouble.getNomor_kk().equals(keluargaDouble.getNomor_kk())) {
+		if(keluargaDouble == null) {
 			nkk += "0001";
 		} else {
 			long doubleNKK = Long.parseLong(keluargaDouble.getNomor_kk()) + 1;
@@ -138,5 +138,18 @@ public class KependudukanServiceDatabase implements KependudukanService{
 		return nik;
 	}
 
-	
+	@Override
+	public KotaModel selectKota(String id_kota) {
+		return kependudukanMapper.selectKota(id_kota);
+	}
+
+	@Override
+	public List<KecamatanModel> selectKecamatanByIdKota(String id_kota) {
+		return kependudukanMapper.selectKecamatanByIdKota(id_kota);
+	}
+
+	@Override
+	public List<KelurahanModel> selectKelurahanByIdKecamatan(String id_kecamatan) {
+		return kependudukanMapper.selectKelurahanByIdKecamatan(id_kecamatan);
+	}
 }

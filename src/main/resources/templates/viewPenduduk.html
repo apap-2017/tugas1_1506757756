@@ -80,8 +80,8 @@
       <p th:text="'Agama: ' + ${penduduk.agama}">Agama</p>
       <p th:text="'Status Perkawinan: ' + ${penduduk.status_perkawinan}">Status Perkawinan</p>
       <p th:text="'Pekerjaan: ' + ${penduduk.pekerjaan}">Pekerjaan</p>
-      <p th:text="'Kewarganegaraan: ' + ${penduduk.kewarganegaraan}">Kewarganegaraan</p>
-      <p th:text="'Status Kematian: ' + ${penduduk.kematian}">Status Kematian</p>
+      <p th:text="${penduduk.is_wni} == 1 ? 'Kewarganegaraan: WNI' : 'Kewarganegaraan: WNA'">Kewarganegaraan</p>
+      <p th:text="${penduduk.is_wafat} == 1 ? 'Status: Wafat' : 'Status: Hidup'">Status Kematian</p>
       <div th:if="${penduduk.is_wafat} == '0'">
 		  <form action="penduduk/mati" method="post">
 				<input type="hidden" name="nik" th:value="${penduduk.nik}"></input>

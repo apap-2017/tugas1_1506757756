@@ -27,9 +27,15 @@ public interface KependudukanService {
 	
 	List<KelurahanModel> selectAllKelurahan();
 	
+	List<KelurahanModel> selectKelurahanByIdKecamatan(String id_kecamatan);
+	
 	List<KecamatanModel> selectAllKecamatan();
 	
+	List<KecamatanModel> selectKecamatanByIdKota(String id_kota);
+	
 	List<KotaModel> selectAllKota();
+	
+	KotaModel selectKota(String id_kota);
 	
 	//select berdasarkan kota,kabupaten,dll...w
 }

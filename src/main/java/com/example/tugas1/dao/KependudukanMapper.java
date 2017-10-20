@@ -20,6 +20,7 @@ import com.example.tugas1.model.PendudukModel;
 @Mapper
 public interface KependudukanMapper {
 	
+	//Penduduk
 	@Select("select * from penduduk join keluarga join kelurahan join kecamatan join kota" + 
 			" on penduduk.id_keluarga = keluarga.id and keluarga.id_kelurahan = kelurahan.id" + 
 			" and kelurahan.id_kecamatan = kecamatan.id and kecamatan.id_kota = kota.id"
@@ -51,11 +52,15 @@ public interface KependudukanMapper {
 	 @Select("select * from penduduk where nik like CONCAT(#{nik},'%') order by nik desc limit 1")
 		PendudukModel getNIKBefore(String nik);
 	
+	 
+	 
+	 //Keluarga
+	 
 	@Select("select * from keluarga, penduduk where penduduk.id_keluarga = keluarga.id and #{id_keluarga} = penduduk.id_keluarga")
     @Results(value = {
         	@Result(property="nik", column="nik"),
         	@Result(property="nama", column="nama"),
-        	@Result(property="tempat_ahir", column="tempat_lahir"),
+        	@Result(property="tempat_lahir", column="tempat_lahir"),
         	@Result(property="tanggal_lahir", column="tanggal_lahir"),
         	@Result(property="jenis_kelamin", column="jenis_kelamin"),
         	@Result(property="is_wni", column="is_wni"),
@@ -122,18 +127,32 @@ public interface KependudukanMapper {
 	@Select("select * from keluarga where nomor_kk like CONCAT(#{nomor_kk},'%') order by nomor_kk desc limit 1")
 	KeluargaModel getNKKBefore(String nomor_kk);
 	
-	@Select("select * from kelurahan join kecamatan join kota"
-			+ " on kelurahan.id_kecamatan = kecamatan.id "
-			+ " and kecamatan.id_kota = kota.id"
+	
+	//Kelurahan
+	@Select("SELECT * FROM kelurahan JOIN kecamatan JOIN kota"
+			+ " ON kelurahan.id_kecamatan = kecamatan.id "
+			+ " AND kecamatan.id_kota = kota.id"
 			)
     @Results(value = {
-    		@Result(property="id", column="kelurahan.id")
+    		@Result(property="id", column="id")
     })
     List<KelurahanModel> selectAllKelurahan();
 	
-	@Select("SELECT * FROM kecamatan")
+	@Select("select * from kelurahan where id_kecamatan = #{id_kecamatan}")
+	List<KelurahanModel> selectKelurahanByIdKecamatan (@Param("id_kecamatan") String id_kecamatan);
+	
+	//Kecamatan
+	@Select("select * from kecamatan")
     List<KecamatanModel> selectAllKecamatan();
 	
-	@Select("SELECT * FROM kota")
+	@Select("select * from kecamatan where id_kota = #{id_kota}")
+	List<KecamatanModel> selectKecamatanByIdKota (@Param("id_kota") String id_kota);
+	
+	
+	//Kota
+	@Select("select * from kota")
     List<KotaModel> selectAllKota();
+	
+	@Select("select nama_kota from kota where id = #{id_kota}")
+    KotaModel selectKota(@Param("id_kota") String id_kota);
 }
