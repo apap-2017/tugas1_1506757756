@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lihat Penduduk</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"></link>
+	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    hr{
+      border-top: 1px solid black;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">SI Kependudukan</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Cari Data</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+  <div class="col-sm-2 sidenav"></div>
+    <div class="col-sm-8 text-left"> 
+      <h3 th:text="'Cari Penduduk'">Lihat Data Penduduk</h3>
+      <br/>
+      <form action="/penduduk/cari" method="get" th:object="${penduduk}">
+
+				<input th:if="${id_kota != null}" id="id_kota" name="id_kota" th:value="${id_kota}" type="hidden"></input> 
+				<input th:if="${id_kecamatan != null}" id="id_kecamatan" name="id_kecamatan" th:value="${id_kecamatan}" type="hidden"></input> 
+				<input th:if="${id_kelurahan != null}" id="id_kelurahan" name="id_kelurahan" th:value="${id_kelurahan}" type="hidden"></input>
+				<div class="form-group">
+					<label for="kota">Kota/Kabupaten</label> 
+					<select class="form-control" name="id_kota" id="id_kota" th:disabled="${id_kota != null}">
+						<option value="">Pilih Kota</option>
+						<option th:each="ListKota : ${list_kota}" th:value="${ListKota.id}" th:text="${ListKota.nama_kota}" th:selected="${id_kota == ListKota.id}"></option>
+					</select>
+				</div>
+				<div class="form-group" th:if="${id_kota != null}">
+					<label for="kecamatan">Kecamatan</label> 
+					<select class="form-control" name="id_kecamatan" id="id_kecamatan" th:disabled="${id_kecamatan != null}">
+						<option value="">Pilih Kecamatan</option>
+						<option th:each="ListKecamatan : ${list_kecamatan}" th:value="${ListKecamatan.id}" th:text="${ListKecamatan.nama_kecamatan}" th:selected="${id_kecamatan == ListKecamatan.id}"></option>
+					</select>
+				</div>
+				<div class="form-group" th:if="${id_kecamatan != null}">
+					<label for="kelurahan">Kelurahan</label> 
+					<select class="form-control" name="id_kelurahan" id="id_kelurahan" th:disabled="${id_kelurahan != null}">
+						<option value="">Pilih Kelurahan</option>
+						<option th:each="ListKelurahan : ${list_kelurahan}" th:value="${ListKelurahan.id}" th:text="${ListKelurahan.nama_kelurahan}" th:selected="${id_kelurahan == ListKelurahan.id}"></option>
+					</select>
+				</div>
+				<button class="btn btn-primary" type="submit" value="save">Lihat</button>
+			</form>
+			<br/>
+			<div class="col-sm-5" style="display: inline-block" th:if="${termuda != null}">
+				<h3 style="text-align: center">Penduduk Termuda</h3>
+				<table class="table table-bordered" style="text-align: center" >
+					<tr class="active">
+						<td>Nik</td>
+						<td th:text="${termuda.nik}">NIK</td>
+					</tr>
+					<tr>
+						<td>Nama</td>
+						<td th:text="${termuda.nama}">Nama</td>
+					</tr>
+					<tr class="active">
+						<td>Tanggal Lahir</td>
+						<td th:text="${termuda.tanggal_lahir}">Tanggal Lahir</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-sm-5" style="float: right" th:if="${tertua != null}">
+				<h3 style="text-align: center">Penduduk Tertua</h3>
+				<table class="table table-bordered" style="text-align: center">
+					<tr class="active">
+						<td>Nik</td>
+						<td th:text="${tertua.nik}">NIK</td>
+					</tr>
+					<tr>
+						<td>Nama</td>
+						<td th:text="${tertua.nama}">Nama</td>
+					</tr>
+					<tr class="active">
+						<td>Tanggal Lahir</td>
+						<td th:text="${tertua.tanggal_lahir}">Tanggal Lahir</td>
+					</tr>
+				</table>
+			</div>
+			<br/>
+			<table class="table table-bordered" id="mytable">
+				<thead>
+					<tr class="active">
+						<th style="text-align: center">No</th>
+						<th>Nama Lengkap</th>
+						<th>NIK</th>
+						<th>Jenis Kelamin</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="text-align: center"
+						th:each="penduduk,iterationStatus:${penduduk}">
+						<th style="text-align: center" th:text="${iterationStatus.count}">No</th>
+						<th th:text="${penduduk.nama}">Nama</th>
+						<th th:text="${penduduk.nik}">Nik</th>
+						<th th:switch="${penduduk.jenis_kelamin}">
+							<div th:case="1">Wanita</div>
+							<div th:case="0">Pria</div>
+						</th>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#mytable').DataTable();
+	});
+</script>
+</body>
+</html>

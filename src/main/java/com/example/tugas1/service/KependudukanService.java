@@ -25,6 +25,8 @@ public interface KependudukanService {
 	
 	String generateNIK(PendudukModel penduduk);
 	
+	String generateNKK(KeluargaModel keluarga);
+	
 	List<KelurahanModel> selectAllKelurahan();
 	
 	List<KelurahanModel> selectKelurahanByIdKecamatan(String id_kecamatan);
@@ -37,5 +39,9 @@ public interface KependudukanService {
 	
 	KotaModel selectKota(String id_kota);
 	
-	//select berdasarkan kota,kabupaten,dll...w
+	List<PendudukModel> selectPendudukByIdKelurahan(String id_kelurahan);
+	
+	PendudukModel pendudukTermuda(String id_kelurahan);
+	
+	PendudukModel pendudukTertua(String id_kelurahan);
 }

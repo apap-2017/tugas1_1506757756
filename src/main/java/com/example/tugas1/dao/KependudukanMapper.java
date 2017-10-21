@@ -46,13 +46,24 @@ public interface KependudukanMapper {
 			+ "where id = #{id}")
     void updatePenduduk (PendudukModel penduduk);
 	
-	 @Update("UPDATE penduduk SET is_wafat = 1 WHERE nik = #{nik}")
+	 @Update("update penduduk set is_wafat = 1 where nik = #{nik}")
 	   void updateStatusKematian(@Param("nik") String nik);
 	 
 	 @Select("select * from penduduk where nik like CONCAT(#{nik},'%') order by nik desc limit 1")
 		PendudukModel getNIKBefore(String nik);
-	
 	 
+	 @Select("select nik, nama, jenis_kelamin from penduduk join keluarga on penduduk.id_keluarga = keluarga.id join "
+				+ "kelurahan on keluarga.id_kelurahan = kelurahan.id join kecamatan on kelurahan.id_kecamatan = kecamatan.id join "
+				+ "kota on kecamatan.id_kota = kota.id where keluarga.id_kelurahan = #{id_kelurahan}")
+		List<PendudukModel> selectPendudukByIdKelurahan(@Param("id_kelurahan") String id_kelurahan);
+	
+	 @Select("select distinct nama, nik, tanggal_lahir, (YEAR(CURDATE())-YEAR(tanggal_lahir)) as umur from penduduk join "
+				+ "keluarga on penduduk.id_keluarga = keluarga.id where keluarga.id_kelurahan = #{id_kelurahan} order by umur asc limit 1")
+		PendudukModel pendudukTermuda(@Param("id_kelurahan") String id_kelurahan); 
+	 
+	 @Select("select distinct nama, nik, tanggal_lahir, (YEAR(CURDATE())-YEAR(tanggal_lahir)) as umur from penduduk join "
+				+ "keluarga on penduduk.id_keluarga = keluarga.id where keluarga.id_kelurahan = #{id_kelurahan} order by umur desc limit 1")
+		PendudukModel pendudukTertua(@Param("id_kelurahan") String id_kelurahan); 
 	 
 	 //Keluarga
 	 
@@ -79,6 +90,7 @@ public interface KependudukanMapper {
 			" and kelurahan.id_kecamatan = kecamatan.id and kecamatan.id_kota = kota.id"
 			+ " where nomor_kk = #{nkk}")
     @Results(value = {
+    		@Result(property="id_keluarga", column="id"),
     		@Result(property="nomor_kk", column="nomor_kk"),
     		@Result(property="alamat", column="alamat"),
     		@Result(property="rt", column="rt"),
@@ -95,7 +107,7 @@ public interface KependudukanMapper {
 	
 	@Update("update keluarga set alamat = #{alamat}, nomor_kk = #{nomor_kk}, rt = #{rt}, rw = #{rw}, "
 			+ "id_kelurahan = #{id_kelurahan}, is_tidak_berlaku = #{is_tidak_berlaku} "
-			+ "where id = #{id}")
+			+ "where id = #{id_keluarga}")
     void updateKeluarga (KeluargaModel keluarga);
 	
 	 @Select("select * from keluarga join kelurahan on id_kelurahan=kelurahan.id"
@@ -129,9 +141,9 @@ public interface KependudukanMapper {
 	
 	
 	//Kelurahan
-	@Select("SELECT * FROM kelurahan JOIN kecamatan JOIN kota"
-			+ " ON kelurahan.id_kecamatan = kecamatan.id "
-			+ " AND kecamatan.id_kota = kota.id"
+	@Select("select * from kelurahan join kecamatan join kota"
+			+ " on kelurahan.id_kecamatan = kecamatan.id "
+			+ " and kecamatan.id_kota = kota.id"
 			)
     @Results(value = {
     		@Result(property="id", column="id")

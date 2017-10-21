@@ -18,6 +18,9 @@ import com.example.tugas1.model.KelurahanModel;
 import com.example.tugas1.model.PendudukModel;
 import com.example.tugas1.service.KependudukanService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class KependudukanController {
 	
@@ -117,9 +120,9 @@ public class KependudukanController {
 		return "sukses-tambah-keluarga";
 	}
 	
-	@RequestMapping("/kelurga/ubah/{nkk}")
-    public String updateKeluarga(Model model,  
-    		@PathVariable(value = "nkk") String nkk)
+	@RequestMapping("/keluarga/ubah/{nkk}")
+    public String ubahKeluarga(Model model, 
+            @PathVariable(value = "nkk") String nkk)
     {
 		KeluargaModel keluarga = pendudukDAO.selectKeluarga(nkk);
 		model.addAttribute("allKelurahan", pendudukDAO.selectAllKelurahan());
@@ -127,19 +130,25 @@ public class KependudukanController {
         return "form-update-keluarga";
     }
 	
-	@RequestMapping(value = "/keluarga/ubah/{nkk}", method = RequestMethod.POST)
-	public String updateKeluargaSubmit(Model model,  
-    		@PathVariable(value = "nkk") String nkk,
-    		@ModelAttribute KeluargaModel keluarga) {
-		
-		KeluargaModel keluargaLama = pendudukDAO.selectKeluarga(nkk);
 
+	@RequestMapping(value = "/keluarga/ubah/{nkk}", method = RequestMethod.POST)
+    public String ubahKeluarga(Model model, @PathVariable(value = "nkk") String nkk,
+    		@ModelAttribute KeluargaModel keluarga)
+    {
+		KeluargaModel keluargaLama = pendudukDAO.selectKeluarga(nkk);
+		keluarga.setNomor_kk(keluargaLama.getNomor_kk());
 		keluarga.setId_keluarga(keluargaLama.getId_keluarga());
-		model.addAttribute("nkk", keluarga.getNomor_kk());
+		keluarga.setIs_tidak_berlaku(keluargaLama.getIs_tidak_berlaku());
+
+		if(!keluargaLama.getId_kelurahan().equals(keluarga.getId_kelurahan())) {
+			keluarga.setNomor_kk(pendudukDAO.generateNKK(keluarga));
+		}
 		
 		pendudukDAO.updateKeluarga(keluarga);
-		return "sukses-tambah-keluarga";
-	}
+		
+		model.addAttribute("nkk", keluargaLama.getNomor_kk());
+        return "sukses-update-keluarga";
+    }
 	
 	 @RequestMapping(value="penduduk/mati", method = RequestMethod.POST)
 	    public String changePendudukStatus(Model model, 
@@ -153,25 +162,34 @@ public class KependudukanController {
 	 
 	 @RequestMapping(value = "/penduduk/cari")
 	 public String cariPendudukKota (Model model,
-			 @RequestParam(value = "kota", required = false, defaultValue = "0") String id_kota,
-	         @RequestParam(value = "kecamatan", required = false, defaultValue = "0") String id_kecamatan,
-	         @RequestParam(value = "kelurahan", required = false, defaultValue = "0") String id_kelurahan){
+			 @RequestParam(value = "id_kota", required = false) String id_kota,
+	         @RequestParam(value = "id_kecamatan", required = false) String id_kecamatan,
+	         @RequestParam(value = "id_kelurahan", required = false) String id_kelurahan){
 		 
 		 List<KotaModel> list_kota = pendudukDAO.selectAllKota();
 		 model.addAttribute("list_kota", list_kota);
+		 model.addAttribute("id_kota", id_kota);
 		 
-		 if(id_kota != null) {
-			 model.addAttribute("id_kota", id_kota);
-			 List<KecamatanModel> list_kecamatan = pendudukDAO.selectKecamatanByIdKota(id_kota);
-			 model.addAttribute("list_kecamatan", list_kecamatan);
-		 }
+		 List<KecamatanModel> list_kecamatan = pendudukDAO.selectKecamatanByIdKota(id_kota);
+		 model.addAttribute("list_kecamatan", list_kecamatan);
+		 model.addAttribute("id_kecamatan", id_kecamatan);
 		 
-		 if(id_kecamatan != null) {
-			 model.addAttribute("id_kecamatan", id_kecamatan);
-			 List<KelurahanModel> list_kelurahan = pendudukDAO.selectKelurahanByIdKecamatan(id_kecamatan);
-			 model.addAttribute("list_kelurahan", list_kelurahan);
-		 }
+		 List<KelurahanModel> list_kelurahan = pendudukDAO.selectKelurahanByIdKecamatan(id_kecamatan);
+		 model.addAttribute("list_kelurahan", list_kelurahan);
+		 model.addAttribute("id_kelurahan", id_kelurahan);
 		 
+		 if (id_kota != null && id_kecamatan != null && id_kelurahan != null) {
+				List<PendudukModel> list_penduduk = pendudukDAO.selectPendudukByIdKelurahan(id_kelurahan);
+				model.addAttribute("penduduk", list_penduduk);
+
+				log.info("Input {}", pendudukDAO.pendudukTermuda(id_kelurahan));
+				
+				PendudukModel penduduk_termuda = pendudukDAO.pendudukTermuda(id_kelurahan);
+				model.addAttribute("termuda", penduduk_termuda);
+				
+				PendudukModel penduduk_tertua = pendudukDAO.pendudukTertua(id_kelurahan);
+				model.addAttribute("tertua", penduduk_tertua);
+			}
 		 return "cari-penduduk";
 	 }
 }

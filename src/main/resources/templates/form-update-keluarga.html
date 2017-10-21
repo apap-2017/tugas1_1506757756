@@ -85,21 +85,23 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="kelurahan">Kelurahan/Desa:</label>
-		    <select name="id_kelurahan" class="form-control selectpicker" data-live-search="true" th:field="*{id_kelurahan}" id="kelurahan">
+		    <select name="id_kelurahan" class="form-control selectpicker" id="kelurahan">
 		     	<option value="">PILIH KELURAHAN</option>
-		     	<option th:each="kelurahan: ${allKelurahan}" th:value="${kelurahan.id}" th:text="${kelurahan.nama_kelurahan}" kota="'[[${kelurahan.nama_kota}]]'"> </option>
+		     	<option th:each="kelurahan: ${allKelurahan}" th:value="${kelurahan.id}" th:text="${kelurahan.nama_kelurahan}" th:selected="${keluarga.id_kelurahan == kelurahan.id ? 'selected' : ''}"> </option>
 		    </select>
 		  </div>
 	      <div class="form-group">
 		    <label for="kecamatan">Kecamatan:</label>
-		    <input type="text" class="form-control" name="kecamatan" id="kecamatan" readonly="readonly"/>
+		    <input type="text" class="form-control" name="kecamatan" th:value="${keluarga.nama_kecamatan}" id="kecamatan" readonly="readonly"/>
 		  </div>
 		  <div class="form-group">
 		    <label for="kota">Kota:</label>
-		    <input type="text" class="form-control" id="kota" readonly="readonly" name="kota"/>
+		    <input type="text" class="form-control" id="kota" th:value="${keluarga.nama_kota}" readonly="readonly" name="kota"/>
 		  </div>
-		  <input type="hidden" name="kode_kecamatan" id="kode_kecamatan"/>
-		  <button type="submit" class="btn btn-primary">Simpan</button>
+		  <div class="form-group">
+		    <input type="hidden" name="kode_kecamatan" id="kode_kecamatan" th:value="${keluarga.kode_kecamatan}"/>
+		  	<button type="submit" class="btn btn-primary">Simpan</button>
+		  </div>
 		</form>
 		<br/>
     </div>

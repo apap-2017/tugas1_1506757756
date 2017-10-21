@@ -54,25 +54,6 @@ public class KependudukanServiceDatabase implements KependudukanService{
 		kependudukanMapper.addKeluarga(keluarga);
 	}
 
-	private String generateNKK(KeluargaModel keluarga) {
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		String[] tanggalSplit = date.split("-");
-		String tahun = tanggalSplit[0].substring(2);
-		String bulan = tanggalSplit[1];
-		String tanggal = tanggalSplit[2];
-	
-		String nkk = keluarga.getKode_kecamatan().substring(0, 6) + tanggal + bulan + tahun;
-		
-		KeluargaModel keluargaDouble = kependudukanMapper.getNKKBefore(nkk);
-		
-		if(keluargaDouble == null) {
-			nkk += "0001";
-		} else {
-			long doubleNKK = Long.parseLong(keluargaDouble.getNomor_kk()) + 1;
-			nkk = doubleNKK + "";
-		}
-		return nkk;
-	}
 
 	@Override
 	public void updatePenduduk(PendudukModel penduduk) {
@@ -82,6 +63,7 @@ public class KependudukanServiceDatabase implements KependudukanService{
 
 	@Override
 	public void updateKeluarga(KeluargaModel keluarga) {
+		log.info("Keluarga updated");
 		kependudukanMapper.updateKeluarga(keluarga);
 	}
 
@@ -151,5 +133,41 @@ public class KependudukanServiceDatabase implements KependudukanService{
 	@Override
 	public List<KelurahanModel> selectKelurahanByIdKecamatan(String id_kecamatan) {
 		return kependudukanMapper.selectKelurahanByIdKecamatan(id_kecamatan);
+	}
+
+	@Override
+	public String generateNKK(KeluargaModel keluarga) {
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String[] tanggalSplit = date.split("-");
+		String tahun = tanggalSplit[0].substring(2);
+		String bulan = tanggalSplit[1];
+		String tanggal = tanggalSplit[2];
+	
+		String nkk = keluarga.getKode_kecamatan().substring(0, 6) + tanggal + bulan + tahun;
+		
+		KeluargaModel keluargaDouble = kependudukanMapper.getNKKBefore(nkk);
+		
+		if(keluargaDouble == null) {
+			nkk += "0001";
+		} else {
+			long doubleNKK = Long.parseLong(keluargaDouble.getNomor_kk()) + 1;
+			nkk = doubleNKK + "";
+		}
+		return nkk;
+	}
+
+	@Override
+	public List<PendudukModel> selectPendudukByIdKelurahan(String id_kelurahan) {
+		return kependudukanMapper.selectPendudukByIdKelurahan(id_kelurahan);
+	}
+
+	@Override
+	public PendudukModel pendudukTermuda(String id_kelurahan) {
+		return kependudukanMapper.pendudukTermuda(id_kelurahan);
+	}
+
+	@Override
+	public PendudukModel pendudukTertua(String id_kelurahan) {
+		return kependudukanMapper.pendudukTertua(id_kelurahan);
 	}
 }
