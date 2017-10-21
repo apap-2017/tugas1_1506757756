@@ -40,9 +40,11 @@ public class KependudukanController {
     }
 	
 	@RequestMapping(value="/penduduk/tambah", method=RequestMethod.POST)
-	public String tambahPenduduk(@ModelAttribute PendudukModel penduduk) {
-		pendudukDAO.addPenduduk(penduduk);
-		return "sukses-tambah-penduduk";
+	public String tambahPenduduk(Model model,
+			@ModelAttribute PendudukModel penduduk) {
+			pendudukDAO.addPenduduk(penduduk);
+			model.addAttribute("nik", penduduk.getNik());
+			return "sukses-tambah-penduduk";
 	}
 	
 	@RequestMapping("/penduduk/ubah/{nik}")
@@ -50,27 +52,29 @@ public class KependudukanController {
     		@PathVariable(value = "nik") String nik)
     {
 		PendudukModel penduduk = pendudukDAO.selectPenduduk(nik);
-		model.addAttribute("penduduk", penduduk);
-        return "form-update-penduduk";
+		if(penduduk != null) {
+			model.addAttribute("penduduk", penduduk);
+	        return "form-update-penduduk";
+		}
+        return "error/not-found";
     }
 	
 	@RequestMapping(value="/penduduk/ubah/{nik}", method=RequestMethod.POST)
 	public String updatePendudukSubmit(Model model,  
     		@PathVariable(value = "nik") String nik,
     		@ModelAttribute PendudukModel penduduk) {
-		
-		PendudukModel pendudukLama = pendudukDAO.selectPenduduk(nik);
-
-		penduduk.setId(pendudukLama.getId());
-		penduduk.setJenis_kelamin(pendudukLama.getJenis_kelamin());
-		model.addAttribute("nik", penduduk.getNik());
-		
-		if(!pendudukLama.getTanggal_lahir().equals(penduduk.getTanggal_lahir()) || !pendudukLama.getId_keluarga().equals(penduduk.getId_keluarga())) {
-			penduduk.setNik(pendudukDAO.generateNIK(penduduk));
-		}
-		
-		pendudukDAO.updatePenduduk(penduduk);
-		return "sukses-update-penduduk";
+			PendudukModel pendudukLama = pendudukDAO.selectPenduduk(nik);
+	
+			penduduk.setId(pendudukLama.getId());
+			penduduk.setJenis_kelamin(pendudukLama.getJenis_kelamin());
+			model.addAttribute("nik", penduduk.getNik());
+			
+			if(!pendudukLama.getTanggal_lahir().equals(penduduk.getTanggal_lahir()) || !pendudukLama.getId_keluarga().equals(penduduk.getId_keluarga())) {
+				penduduk.setNik(pendudukDAO.generateNIK(penduduk));
+			}
+			
+			pendudukDAO.updatePenduduk(penduduk);
+			return "sukses-update-penduduk";
 	}
 	
 	
@@ -84,8 +88,7 @@ public class KependudukanController {
             model.addAttribute ("penduduk", penduduk);
             return "viewPenduduk";
         } else {
-            model.addAttribute ("penduduk", penduduk);
-            return "index";
+            return "error/not-found";
         }
     }
 	
@@ -99,8 +102,7 @@ public class KependudukanController {
             model.addAttribute ("keluarga", keluarga);
             return "viewKeluarga";
         } else {
-            model.addAttribute ("keluarga", keluarga);
-            return "index";
+            return "error/not-found";
         }
     }
 	
@@ -115,9 +117,9 @@ public class KependudukanController {
 	@RequestMapping(value="/keluarga/tambah", method=RequestMethod.POST)
 	public String tambahKeluarga(Model model,
 			@ModelAttribute KeluargaModel keluarga) {
-		pendudukDAO.addKeluarga(keluarga);
-		model.addAttribute("nkk", keluarga.getNomor_kk());
-		return "sukses-tambah-keluarga";
+			pendudukDAO.addKeluarga(keluarga);
+			model.addAttribute("nkk", keluarga.getNomor_kk());
+			return "sukses-tambah-keluarga";
 	}
 	
 	@RequestMapping("/keluarga/ubah/{nkk}")
@@ -125,9 +127,13 @@ public class KependudukanController {
             @PathVariable(value = "nkk") String nkk)
     {
 		KeluargaModel keluarga = pendudukDAO.selectKeluarga(nkk);
-		model.addAttribute("allKelurahan", pendudukDAO.selectAllKelurahan());
-		model.addAttribute("keluarga", keluarga);
-        return "form-update-keluarga";
+		
+		if(keluarga != null ) {
+			model.addAttribute("allKelurahan", pendudukDAO.selectAllKelurahan());
+			model.addAttribute("keluarga", keluarga);
+	        return "form-update-keluarga";
+		}
+		return "error/not-found";
     }
 	
 

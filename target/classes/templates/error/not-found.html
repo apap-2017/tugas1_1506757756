@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Sukses Tambah Penduduk</title>
+  <title>Error</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -66,8 +66,8 @@
   <div class="row content">
   <div class="col-sm-2 sidenav"></div>
     <div class="col-sm-8 text-left"> 
-      <h3 th:text="'Sukses'">Sukses!</h3>
-       <p th:text="'Penduduk dengan NIK ' + ${nik} + ' berhasil ditambahkan'">Berhasil</p>
+      <h1 th:text="'ERROR!'">ERROR!</h1>
+      <h3 th:text="'Data yang dicari tidak ditemukan'">Tidak ditemukan</h3>
       <br/>
 	</div>
   </div>
